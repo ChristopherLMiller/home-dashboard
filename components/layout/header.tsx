@@ -14,7 +14,7 @@ const Header = () => {
     async function getWeather() {
       console.log('fetching weather');
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=millersburg,in,us&units=imperial&appid=${process.env.NEXT_PUBLIC_OPEN_WEATHER_MAP_API_KEY}`
+        `https://api.openweathermap.org/data/2.5/weather?q=${process.env.NEXT_PUBLIC_LOCATION}&units=imperial&appid=${process.env.NEXT_PUBLIC_OPEN_WEATHER_MAP_API_KEY}`
       );
       const data = await response.json();
       setCurrentTemp(Math.round(data.main.feels_like));
