@@ -28,11 +28,11 @@ const Button: FunctionComponent<iButton> = ({ entity, type }) => {
     }
 
     // fetch the initial state
-    getState();
+    //getState();
 
     // setup interval to fetch state occasionally
     const interval = setInterval(() => {
-      getState();
+      //getState();
     }, 500);
 
     // clean up on return
