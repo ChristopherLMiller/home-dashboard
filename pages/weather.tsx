@@ -1,14 +1,17 @@
 import { format } from 'date-fns';
 import { NextPage } from 'next';
 import { useQuery } from 'react-query';
+import { useLocalStorage } from 'react-use';
 import { degTocard } from '../src/windDirection';
 
 const WeatherPage: NextPage = () => {
+  const [lat] = useLocalStorage('lat');
+  const [lon] = useLocalStorage('lon');
   const { isLoading, data, error } = useQuery(
     `FORECAST`,
     async () => {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${process.env.NEXT_PUBLIC_LAT}&lon=${process.env.NEXT_PUBLIC_LON}&units=imperial&appid=${process.env.NEXT_PUBLIC_OPEN_WEATHER_MAP_API_KEY}`
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${process.env.NEXT_PUBLIC_OPEN_WEATHER_MAP_API_KEY}`
       );
       const data = await response.json();
       return data;
@@ -21,11 +24,9 @@ const WeatherPage: NextPage = () => {
   if (error) {
     console.log(error);
   }
-
-  console.log(data);
   return (
     <div className='p-4'>
-      {!isLoading && (
+      {!isLoading && !error && (
         <div className='current-weather grid grid-cols-3'>
           <img
             className='w-double'
