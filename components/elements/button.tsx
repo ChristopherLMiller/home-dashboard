@@ -8,10 +8,8 @@ interface iButton {
 }
 
 const Button: FunctionComponent<iButton> = ({ entityName, type }) => {
-  const entities = useContext(HASSContext);
-  const [cookie] = useCookie('settings');
-  const entity = entities[entityName];
-  console.log(entity);
+  const context = useContext(HASSContext);
+  const entity = context.entities[entityName];
 
   return (
     <div className='bg-gray-800 rounded-t-xl'>
