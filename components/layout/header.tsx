@@ -11,7 +11,6 @@ const Header = () => {
   const { isLoading, error, data } = useQuery(
     'CURRENT_WEATHER',
     () => {
-      console.log('updating current weather');
       return fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${settings?.geoLocation}&units=imperial&appid=${process.env.NEXT_PUBLIC_OPEN_WEATHER_MAP_API_KEY}`
       ).then((res) => res.json());
@@ -26,6 +25,7 @@ const Header = () => {
   }, 60 * 1000);
 
   if (error) {
+    // TODO: Add som sort of notification
     console.log(error);
   }
   return (

@@ -1,21 +1,49 @@
 import { useCookie } from 'react-use';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import HASSContext from '../components/HassContext/context';
 
 const SettingsPage = () => {
+  const context = useContext(HASSContext);
   const [value, updateCookie] = useCookie('settings');
   const settings = value && JSON.parse(value);
 
-  const [lat, setLat] = useState(settings?.lat);
-  const [lon, setLon] = useState(settings?.lon);
-  const [geoLocation, setGeoLocation] = useState(settings?.geoLocation);
-  const [roonServer, setRoonServer] = useState(settings?.roonServer);
-  const [hassServer, setHomeAssistantServer] = useState(settings?.hassServer);
+  const [lat, setLat] = useState(settings?.lat || process.env.NEXT_PUBLIC_LAT);
+  const [lon, setLon] = useState(settings?.lon || process.env.NEXT_PUBLIC_LON);
+  const [geoLocation, setGeoLocation] = useState(
+    settings?.geoLocation || process.env.NEXT_PUBLIC_LOCATION
+  );
+  const [roonServer, setRoonServer] = useState(
+    settings?.roonServer || process.env.NEXT_PUBLIC_ROON_SERVER
+  );
+  const [hassServer, setHomeAssistantServer] = useState(
+    settings?.hassServer || process.env.NEXT_PUBLIC_HASS_URL
+  );
+  const [hassEntities, setHassEntities] = useState(settings?.hassEntities);
 
   const saveStateToCookie = () => {
     updateCookie(
-      JSON.stringify({ lat, lon, geoLocation, roonServer, hassServer })
+      JSON.stringify({
+        lat,
+        lon,
+        geoLocation,
+        roonServer,
+        hassServer,
+        hassEntities,
+      })
     );
   };
+
+  const entities = Object.values(context.entities)
+    .map((entity) => ({
+      value: entity?.entity_id,
+      name: entity?.attributes?.friendly_name,
+    }))
+    .filter((entity) => {
+      const type = entity.value?.split('.')[0];
+      return (
+        entity.name !== undefined && (type === 'switch' || type === `light`)
+      );
+    });
 
   return (
     <div className='p-10'>
@@ -85,6 +113,26 @@ const SettingsPage = () => {
             value={hassServer}
             onChange={(e) => setHomeAssistantServer(e.target.value)}
           />
+          <label className='text-gray-100 text-3xl' htmlFor='entities'>
+            Entities
+          </label>
+          <br />
+          <select
+            name='entities'
+            className='text-3xl'
+            multiple
+            onChange={(e) => {
+              setHassEntities(
+                Array.from(e.target.selectedOptions).map(({ value }) => value)
+              );
+            }}
+          >
+            {entities.map((entity) => (
+              <option value={entity.value} key={entity.value}>
+                {entity.name}
+              </option>
+            ))}
+          </select>
         </fieldset>
       </div>
       <button

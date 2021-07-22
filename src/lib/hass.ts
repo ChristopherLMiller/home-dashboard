@@ -9,7 +9,7 @@ import {
 
 export async function HASSConnection() {
   const auth = createLongLivedTokenAuth(
-    'https://home.millerresidence.site',
+    process.env.NEXT_PUBLIC_HASS_URL as string,
     process.env.NEXT_PUBLIC_HASS_TOKEN as string
   );
 

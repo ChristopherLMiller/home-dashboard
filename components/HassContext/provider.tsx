@@ -1,5 +1,6 @@
 import {
-  Connection,
+  HassEntities,
+  HassServices,
   subscribeEntities,
   subscribeServices,
 } from 'home-assistant-js-websocket';
@@ -8,14 +9,12 @@ import { HASSConnection } from '../../src/lib/hass';
 import HASSContext from './context';
 
 const HASSContextProvider: FC = (props) => {
-  const [entities, setEntities] = useState({});
-  const [services, setServices] = useState({});
-  const [connection, setConnection] = useState<Connection>();
+  const [entities, setEntities] = useState<HassEntities>({});
+  const [services, setServices] = useState<HassServices>({});
 
   useEffect(() => {
     async function getConnection() {
       const conn = await HASSConnection();
-      setConnection(conn);
       subscribeServices(conn, (subServices) => setServices(subServices));
       subscribeEntities(conn, (subEntities) => setEntities(subEntities));
     }
