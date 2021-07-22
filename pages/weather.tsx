@@ -66,9 +66,14 @@ const WeatherPage: NextPage = () => {
             </p>
             <p className='text-gray-400 uppercase text-3xl'>
               Sunrise:{' '}
-              {format(new Date(data?.current?.sunrise * 1000), 'h:mmaaaaa')}{' '}
+              {data?.current?.sunrise &&
+                format(
+                  new Date(data?.current?.sunrise * 1000),
+                  'h:mmaaaaa'
+                )}{' '}
               Sunset:{' '}
-              {format(new Date(data?.current?.sunset * 1000), 'h:mmaaaaa')}
+              {data?.current?.sunset &&
+                format(new Date(data?.current?.sunset * 1000), 'h:mmaaaaa')}
             </p>
           </div>
         </div>
